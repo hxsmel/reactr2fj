@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.sidebar {
+  padding: 16px;
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+}
