@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "preact": "^10.26.4"
+    "normalize.css": "^8.0.1",
+    "preact": "^10.26.4",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
+    "@types/react-dom": "^19.1.2",
+    "sass-embedded": "^1.87.0",
     "typescript": "~5.7.2",
     "vite": "^6.3.1"
   }
