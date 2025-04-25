@@ -1,29 +1,31 @@
-.loginForm {
+.registerForm {
   background-color: darkseagreen;
   display: flex;
   flex-direction: column;
 }
 
-.loginFormTitle {
+.registerFormTitle {
   padding-top: 30px;
   padding-bottom: 10px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
-.usernameInput,
-.passwordInput,
-.loginButton {
+.registerEmailInput,
+.registerUsernameInput,
+.registerPasswordInput,
+.registerButton {
   display: flex;
   justify-content: center;
   margin: 0 400px 8px 400px;
 }
 
-.usernameInput,
-.passwordInput {
+.registerEmailInput,
+.registerUsernameInput,
+.registerPasswordInput {
   background-color: lightblue;
 }
 
-.loginButton {
+.registerButton {
   background-color: mediumpurple;
 }
-

@@ -1,11 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.scss'
-import LoginForm from './LoginForm/LoginForm.tsx'
+import { EnterSiteForm } from "./EnterSiteForm/EnterSiteForm";
+
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <LoginForm />
+        <EnterSiteForm />
     </StrictMode>,
 )
 
