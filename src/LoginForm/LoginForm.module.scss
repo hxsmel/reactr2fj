@@ -1,7 +1,11 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blanchedalmond;
+}
+
 .loginForm {
-  margin-top: 500px;
-  margin-left: 500px;
-  margin-right: 500px;
   background-color: darkseagreen;
   display: flex;
   flex-direction: column;

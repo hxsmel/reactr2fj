@@ -12,5 +12,3 @@ export default function LoginForm() {
         </>
     );
 }
-
-//wayl33t lowp3d
