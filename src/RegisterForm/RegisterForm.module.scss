@@ -1,0 +1,31 @@
+.registerForm {
+  background-color: darkseagreen;
+  display: flex;
+  flex-direction: column;
+}
+
+.registerFormTitle {
+  padding-top: 30px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.registerEmailInput,
+.registerUsernameInput,
+.registerPasswordInput,
+.registerButton {
+  display: flex;
+  justify-content: center;
+  margin: 0 400px 8px 400px;
+}
+
+.registerEmailInput,
+.registerUsernameInput,
+.registerPasswordInput {
+  background-color: lightblue;
+}
+
+.registerButton {
+  background-color: mediumpurple;
+}
