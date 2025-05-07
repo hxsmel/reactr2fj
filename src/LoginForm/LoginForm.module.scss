@@ -1,0 +1,36 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blanchedalmond;
+}
+
+.loginForm {
+  background-color: darkseagreen;
+  display: flex;
+  flex-direction: column;
+}
+
+.loginFormTitle {
+  padding-top: 30px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.usernameInput,
+.passwordInput,
+.loginButton {
+  display: flex;
+  justify-content: center;
+  margin: 0 400px 8px 400px;
+}
+
+.usernameInput,
+.passwordInput {
+  background-color: lightblue;
+}
+
+.loginButton {
+  background-color: mediumpurple;
+}
+
