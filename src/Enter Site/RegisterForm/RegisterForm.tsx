@@ -1,6 +1,6 @@
 import styles from './RegisterForm.module.scss';
 import { useState } from 'react';
-import { emailRegex } from '../constants.ts';
+import { emailRegex } from '../../constants.ts';
 
 type Credentials = {
     email: string;

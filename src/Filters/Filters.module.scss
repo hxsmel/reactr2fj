@@ -1,0 +1,25 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  width: 300px;
+}
+
+.filtersHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filtersSection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.closeBtn, .genre, .sortBy {
+  cursor: pointer;
+}
+
