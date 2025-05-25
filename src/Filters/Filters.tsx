@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+import { useState, useEffect } from 'react';
 import styles from './Filters.module.scss';
-import {TSortBy} from "../types";
-import { INITIAL_GENRES_STATE } from "../constants";
+import { TSortBy, Genre } from '../types';
+import { Select } from '../components/Select/Select';
+import { GenresList } from '../components/GenresList/GenresList';
+import { TMDB_OPTIONS, TMDB_GENRE_URL } from '../constants';
+import { YEAR_OPTIONS, SORT_OPTIONS } from '../constants';
 
 export function Filters() {
-    const [sortBy, setSortBy] = useState<TSortBy>("Популярности");
-    const [genres, setGenres] = useState<Record<string, boolean>>(INITIAL_GENRES_STATE);
+    const [sortBy, setSortBy] = useState<TSortBy>('Популярности');
+    const [year, setYear] = useState<string>(new Date().getFullYear().toString());
+    const [genresList, setGenresList] = useState<Genre[]>([]);
+    const [selectedGenres, setSelectedGenres] = useState<Record<number, boolean>>({});
 
-    const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setGenres({...genres, [e.target.name]: e.target.checked});
+    useEffect(() => {
+        fetch(TMDB_GENRE_URL, TMDB_OPTIONS)
+            .then(res => res.json())
+            .then(data => setGenresList(data.genres))
+            .catch(err => console.error('Ошибка загрузки жанров:', err));
+    }, []);
+
+    useEffect(() => {
+        if (genresList.length === 0) return;
+
+        const initMap = genresList.reduce<Record<number, boolean>>((map, genre) => {
+            map[genre.id] = false;
+            return map;
+        }, {});
+
+        setSelectedGenres(initMap);
+    }, [genresList]);
+
+    const handleGenreChange = (id: number, checked: boolean) => {
+        setSelectedGenres(prev => ({ ...prev, [id]: checked }));
     };
 
     return (
@@ -19,34 +42,33 @@ export function Filters() {
             </div>
 
             <div className={styles.filtersSection}>
-                <label htmlFor="sortSelect">Сортировать по:</label>
-                <select
-                    className={styles.sortBy}
+                <Select
+                    label="Сортировать по:"
                     id="sortSelect"
+                    options={SORT_OPTIONS}
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as TSortBy)}
-                >
-                    <option>Популярности</option>
-                    <option>Рейтингу</option>
-                    <option>Году</option>
-                </select>
+                    onChange={value => setSortBy(value as TSortBy)}
+                />
+            </div>
+
+            <div className={styles.filtersSection}>
+                <Select
+                    label="Год релиза:"
+                    id="yearSelect"
+                    options={YEAR_OPTIONS}
+                    value={year}
+                    onChange={value => setYear(value)}
+                />
             </div>
 
             <div className={styles.filtersSection}>
                 <h3>Жанры</h3>
-                {Object.keys(genres).map((genre) => (
-                    <label key={genre}>
-                        <input
-                            className={styles.genre}
-                            type="checkbox"
-                            name={genre}
-                            checked={genres[genre]}
-                            onChange={handleGenreChange}
-                        />
-                        {genre}
-                    </label>
-                    ))}
+                <GenresList
+                    genres={genresList}
+                    selected={selectedGenres}
+                    onChange={handleGenreChange}
+                />
             </div>
         </div>
-    )
+    );
 }
