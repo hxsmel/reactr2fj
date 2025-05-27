@@ -11,3 +11,16 @@ export interface OptionData {
     label: string;
     value: string;
 }
+
+export type State = {
+    sortBy: TSortBy;
+    year: string;
+    selectedGenres: Record<number, boolean>;
+};
+
+export type Action =
+    | { type: 'setSortBy'; payload: TSortBy }
+    | { type: 'setYear'; payload: string }
+    | { type: 'toggleGenre'; payload: { id: number; checked: boolean } }
+    | { type: 'initGenres'; payload: Record<number, boolean> }
+    | { type: 'reset' };
