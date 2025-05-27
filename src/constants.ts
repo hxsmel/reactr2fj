@@ -1,4 +1,4 @@
-import {OptionData, TSortBy} from "./types.ts";
+import { OptionData, State, TSortBy } from "./types.ts";
 
 export const emailRegex = /^[a-zA-Z0-9.\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z0-9_-]+$/;
 
@@ -34,3 +34,9 @@ export const SORT_OPTIONS: OptionData[] = [
 export const INITIAL_SORT_BY: TSortBy = 'Популярности';
 export const INITIAL_YEAR: string = new Date().getFullYear().toString();
 export const INITIAL_SELECTED_GENRES: Record<number, boolean> = {};
+
+export const INITIAL_STATE: State = {
+    sortBy: INITIAL_SORT_BY,
+    year: INITIAL_YEAR,
+    selectedGenres: INITIAL_SELECTED_GENRES
+};
