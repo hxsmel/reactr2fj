@@ -24,3 +24,8 @@ export type Action =
     | { type: 'toggleGenre'; payload: { id: number; checked: boolean } }
     | { type: 'initGenres'; payload: Record<number, boolean> }
     | { type: 'reset' };
+
+export interface AuthContextType {
+    token: string;
+    setToken: (token: string) => void;
+}
