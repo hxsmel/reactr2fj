@@ -1,3 +1,5 @@
+import {ReactNode} from "react";
+
 export type TFormType = 'login' | 'register';
 
 export type TSortBy = 'Популярности' | 'Рейтингу' | 'Году';
@@ -29,3 +31,7 @@ export interface AuthContextType {
     token: string;
     setToken: (token: string) => void;
 }
+
+export type FiltersProviderProps = {
+    children: ReactNode;
+};
