@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './Filters.module.scss';
 import { TSortBy, Genre } from '../types';
 import { Select } from '../Components/Select/Select';
@@ -6,15 +6,20 @@ import { GenresList } from '../Components/GenresList/GenresList';
 import {
     TMDB_GENRE_URL,
     YEAR_OPTIONS,
-    SORT_OPTIONS,
-    INITIAL_STATE
+    SORT_OPTIONS
 } from '../constants';
-import { reducer } from './Reducer';
 import { useAuth } from '../Contexts/UseAuth';
 import { useFetch } from '../hooks/useFetch';
+import { FiltersStateContext, FiltersDispatchContext } from '../Contexts/FiltersContext';
 
 export function Filters() {
-    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+    const state = useContext(FiltersStateContext);
+    const dispatch = useContext(FiltersDispatchContext);
+
+    if (!state || !dispatch) {
+        throw new Error('Filters must be used within a FiltersProvider');
+    }
+
     const { sortBy, year, selectedGenres } = state;
     const [genresList, setGenresList] = useState<Genre[]>([]);
     const { token } = useAuth();
@@ -35,13 +40,16 @@ export function Filters() {
     useEffect(() => {
         if (data) {
             setGenresList(data.genres);
-            const initMap = data.genres.reduce((map: Record<number, boolean>, genre) => {
-                map[genre.id] = false;
-                return map;
-            }, {} as Record<number, boolean>);
+            const initMap = data.genres.reduce(
+                (map: Record<number, boolean>, genre) => {
+                    map[genre.id] = false;
+                    return map;
+                },
+                {} as Record<number, boolean>
+            );
             dispatch({ type: 'initGenres', payload: initMap });
         }
-    }, [data]);
+    }, [data, dispatch]);
 
     const handleReset = () => {
         dispatch({ type: 'reset' });
@@ -66,7 +74,9 @@ export function Filters() {
                     id="sortSelect"
                     options={SORT_OPTIONS}
                     value={sortBy}
-                    onChange={v => dispatch({ type: 'setSortBy', payload: v as TSortBy })}
+                    onChange={(v) =>
+                        dispatch({ type: 'setSortBy', payload: v as TSortBy })
+                    }
                 />
             </div>
 
@@ -76,7 +86,7 @@ export function Filters() {
                     id="yearSelect"
                     options={YEAR_OPTIONS}
                     value={year}
-                    onChange={v => dispatch({ type: 'setYear', payload: v })}
+                    onChange={(v) => dispatch({ type: 'setYear', payload: v })}
                 />
             </div>
 
