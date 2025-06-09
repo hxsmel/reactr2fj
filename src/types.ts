@@ -14,18 +14,18 @@ export interface OptionData {
     value: string;
 }
 
-export type State = {
-    sortBy: TSortBy;
-    year: string;
-    selectedGenres: Record<number, boolean>;
-};
-
 export type Action =
     | { type: 'setSortBy'; payload: TSortBy }
-    | { type: 'setYear'; payload: string }
-    | { type: 'toggleGenre'; payload: { id: number; checked: boolean } }
     | { type: 'initGenres'; payload: Record<number, boolean> }
-    | { type: 'reset' };
+    | { type: 'toggleGenre'; payload: { id: number; checked: boolean } }
+    | { type: 'reset' }
+    | { type: 'setYearRange'; payload: [number, number] };
+
+export interface State {
+    sortBy: TSortBy;
+    selectedGenres: Record<number, boolean>;
+    yearRange: [number, number];
+}
 
 export interface AuthContextType {
     token: string;
@@ -35,3 +35,24 @@ export interface AuthContextType {
 export type FiltersProviderProps = {
     children: ReactNode;
 };
+
+export interface Movie {
+    id: number
+    title: string
+    rating: number
+    image: string
+}
+
+export interface MovieCardProps {
+    title: string
+    rating: number
+    image: string
+    favorite?: boolean
+    onToggleFavorite?: () => void
+}
+
+export interface PaginationProps {
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+}

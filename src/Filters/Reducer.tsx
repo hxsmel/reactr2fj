@@ -1,31 +1,33 @@
-import {Action, State} from "../types.ts";
-import {INITIAL_SORT_BY, INITIAL_YEAR} from "../constants.ts";
+import { Action, State } from '../types';
+import { INITIAL_SORT_BY, INITIAL_YEAR_RANGE } from '../constants';
 
 export function reducer(state: State, action: Action): State {
     switch (action.type) {
         case 'setSortBy':
             return { ...state, sortBy: action.payload };
-        case 'setYear':
-            return { ...state, year: action.payload };
+
+        case 'initGenres':
+            return { ...state, selectedGenres: action.payload };
+
         case 'toggleGenre':
             return {
                 ...state,
                 selectedGenres: {
                     ...state.selectedGenres,
-                    [action.payload.id]: action.payload.checked
-                }
+                    [action.payload.id]: action.payload.checked,
+                },
             };
-        case 'initGenres':
-            return {
-                ...state,
-                selectedGenres: action.payload
-            };
+
+        case 'setYearRange':
+            return { ...state, yearRange: action.payload };
+
         case 'reset':
             return {
                 sortBy: INITIAL_SORT_BY,
-                year: INITIAL_YEAR,
-                selectedGenres: {}
+                selectedGenres: {},
+                yearRange: INITIAL_YEAR_RANGE,
             };
+
         default:
             return state;
     }
