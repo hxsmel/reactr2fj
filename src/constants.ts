@@ -9,13 +9,9 @@ export const TOTAL_PAGES = 5;
 export const TMDB_GENRE_URL = 'https://api.themoviedb.org/3/genre/movie/list?language=ru';
 export const TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4Yjc0MzM2ZTg4NjVmNTU5M2I0ZjMyMTgxMzI4MzhmOCIsIm5iZiI6MTc0Nzc5OTY1Mi40NTQwMDAyLCJzdWIiOiI2ODJkNGU2NDQzN2ZhZGNjNmY2NDk4YzIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.pg41oUGIaCbX1oT0xzpXyWiwCU9CWt_QD6d3XoYur4g';
 
-export const YEAR_OPTIONS: OptionData[] = Array.from(
-    { length: new Date().getFullYear() - 1899 },
-    (_, i) => {
-        const year = (1900 + i).toString();
-        return { label: year, value: year };
-    }
-);
+export const MIN_YEAR = 1920;
+export const MAX_YEAR = new Date().getFullYear();
+export const INITIAL_YEAR_RANGE: [number, number] = [MIN_YEAR, MAX_YEAR];
 
 export const SORT_OPTIONS: OptionData[] = [
     { label: 'Популярности', value: 'Популярности' },
@@ -24,13 +20,11 @@ export const SORT_OPTIONS: OptionData[] = [
 ];
 
 export const INITIAL_SORT_BY: TSortBy = 'Популярности';
-export const INITIAL_YEAR: string = new Date().getFullYear().toString();
-export const INITIAL_SELECTED_GENRES: Record<number, boolean> = {};
 
 export const INITIAL_STATE: State = {
     sortBy: INITIAL_SORT_BY,
-    year: INITIAL_YEAR,
-    selectedGenres: INITIAL_SELECTED_GENRES,
+    selectedGenres: {},
+    yearRange: INITIAL_YEAR_RANGE,
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

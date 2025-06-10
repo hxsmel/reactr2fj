@@ -1,35 +1,66 @@
-import { Header } from '../Header/Header';
-import { Filters } from '../Filters/Filters';
-import { Pagination } from '../Pagination/Pagination';
-import { AuthProvider } from '../Contexts/AuthContext';
-import { FiltersProvider } from '../Contexts/FiltersProvider';
-import styles from './App.module.scss';
-import { INITIAL_PAGE, TOTAL_PAGES } from '../constants';
-import { useState } from 'react';
+import { useState } from 'react'
+import Box from '@mui/material/Box'
+import { Header } from '../Header/Header'
+import { Filters } from '../Filters/Filters'
+import { MoviesList } from '../components/Movies/MoviesList'
+import { AuthProvider } from '../Contexts/AuthContext'
+import { FiltersProvider } from '../Contexts/FiltersProvider'
+import { INITIAL_PAGE, TOTAL_PAGES } from '../constants'
 
 export function App() {
-    const [page, setPage] = useState<number>(INITIAL_PAGE);
+    const [page, setPage] = useState<number>(INITIAL_PAGE)
 
     return (
         <AuthProvider>
             <FiltersProvider>
-                <div className={styles.container}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: 1280,
+                        height: 771,
+                    }}
+                >
                     <Header />
 
-                    <div className={styles.main}>
-                        <aside className={styles.sidebar}>
-                            <Filters />
-                            <Pagination
+                    <Box
+                        component="main"
+                        sx={{
+                            display: 'flex',
+                            flex: 1,
+                            mb: 2,
+                        }}
+                    >
+                        <Box
+                            component="aside"
+                            sx={{
+                                pl: 2,
+                                pt: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Filters
                                 currentPage={page}
                                 totalPages={TOTAL_PAGES}
                                 onPageChange={setPage}
                             />
-                        </aside>
+                        </Box>
 
-                        <main className={styles.content} />
-                    </div>
-                </div>
+                        <Box
+                            component="section"
+                            sx={{
+                                flex: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                overflow: 'hidden',
+                            }}
+                        >
+                            <MoviesList />
+                        </Box>
+                    </Box>
+                </Box>
             </FiltersProvider>
         </AuthProvider>
-    );
+    )
 }
