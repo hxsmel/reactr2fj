@@ -1,11 +1,4 @@
-import { ReactNode, useState } from 'react';
-import { TOKEN, AuthContext } from '../constants';
+import {createContext} from "react";
+import {AuthContextType} from "../types";
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [token, setToken] = useState<string>(TOKEN);
-    return (
-        <AuthContext.Provider value={{ token, setToken }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
