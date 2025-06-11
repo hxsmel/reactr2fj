@@ -9,6 +9,7 @@ import { INITIAL_PAGE, TOTAL_PAGES } from '../constants'
 
 export function App() {
     const [page, setPage] = useState<number>(INITIAL_PAGE)
+    const [pagesCount, setPagesCount] = useState<number>(TOTAL_PAGES)
 
     return (
         <AuthProvider>
@@ -42,7 +43,7 @@ export function App() {
                         >
                             <Filters
                                 currentPage={page}
-                                totalPages={TOTAL_PAGES}
+                                totalPages={pagesCount}
                                 onPageChange={setPage}
                             />
                         </Box>
@@ -56,7 +57,10 @@ export function App() {
                                 overflow: 'hidden',
                             }}
                         >
-                            <MoviesList />
+                            <MoviesList
+                                currentPage={page}
+                                onTotalPagesChange={setPagesCount}
+                            />
                         </Box>
                     </Box>
                 </Box>

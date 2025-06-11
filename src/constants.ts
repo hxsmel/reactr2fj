@@ -16,7 +16,6 @@ export const INITIAL_YEAR_RANGE: [number, number] = [MIN_YEAR, MAX_YEAR];
 export const SORT_OPTIONS: OptionData[] = [
     { label: 'Популярности', value: 'Популярности' },
     { label: 'Рейтингу', value: 'Рейтингу' },
-    { label: 'Году', value: 'Году' },
 ];
 
 export const INITIAL_SORT_BY: TSortBy = 'Популярности';
@@ -28,3 +27,6 @@ export const INITIAL_STATE: State = {
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const MOVIES_PER_PAGE = 6
+export const TMDB_PER_PAGE = 20

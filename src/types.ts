@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 
 export type TFormType = 'login' | 'register';
 
-export type TSortBy = 'Популярности' | 'Рейтингу' | 'Году';
+export type TSortBy = 'Популярности' | 'Рейтингу';
 
 export interface Genre {
     id: number;
@@ -36,13 +36,6 @@ export type FiltersProviderProps = {
     children: ReactNode;
 };
 
-export interface Movie {
-    id: number
-    title: string
-    rating: number
-    image: string
-}
-
 export interface MovieCardProps {
     title: string
     rating: number
@@ -55,4 +48,21 @@ export interface PaginationProps {
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+}
+
+export interface MoviesListProps {
+    currentPage: number
+    onTotalPagesChange: (total: number) => void;
+}
+
+export interface TMDBResponse {
+    page: number
+    results: Array<{
+        id: number
+        title: string
+        vote_average: number
+        poster_path: string | null
+    }>
+    total_pages: number
+    total_results: number
 }
