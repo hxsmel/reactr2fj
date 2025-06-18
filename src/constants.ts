@@ -27,3 +27,5 @@ export const INITIAL_STATE: State = {
 
 export const MOVIES_PER_PAGE = 6
 export const TMDB_PER_PAGE = 20
+
+export const BASE_URL = 'https://api.themoviedb.org/3/movie';

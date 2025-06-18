@@ -1,16 +1,19 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react';
 import {
     Card,
     CardMedia,
     CardContent,
     Typography,
     IconButton,
-    Box
-} from '@mui/material'
-import { Star, StarBorder } from '@mui/icons-material'
-import { MovieCardProps } from '../../types'
+    Box,
+    CardActionArea,
+} from '@mui/material';
+import { Star, StarBorder } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+import { MovieCardProps } from '../../types';
 
 export const MovieCard: React.FC<MovieCardProps> = ({
+                                                        id,
                                                         title,
                                                         rating,
                                                         image,
@@ -20,35 +23,37 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     const [isFavorite, setIsFavorite] = useState<boolean>(favorite)
 
     const handleClick = () => {
-        setIsFavorite(prev => !prev)
-        if (onToggleFavorite) onToggleFavorite()
-    }
+        setIsFavorite((prev) => !prev);
+        onToggleFavorite?.(id);
+    };
 
     return (
-        <Card sx={{width: 286, height: 324}}>
-            <CardMedia
-                component="img"
-                height="240"
-                image={image}
-                alt={"Тут будет картинка"}
-            />
-            <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="subtitle1" component="div">
-                        {title}
+        <Card sx={{ width: 286, height: 324 }}>
+            <CardActionArea component={RouterLink} to={`/movies/${id}`}>
+                <CardMedia
+                    component="img"
+                    height="240"
+                    image={image}
+                    alt={"Тут должен был быть постер фильма"}
+                />
+                <CardContent>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Typography variant="subtitle1">{title}</Typography>
+                        <IconButton
+                            size="medium"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleClick();
+                            }}
+                        >
+                            {isFavorite ? <Star sx={{ color: 'gold' }} /> : <StarBorder />}
+                        </IconButton>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary">
+                        Рейтинг {rating}
                     </Typography>
-                    <IconButton size="medium" onClick={handleClick}>
-                        {isFavorite ? (
-                            <Star sx={{color: 'gold'}}/>
-                        ) : (
-                            <StarBorder/>
-                        )}
-                    </IconButton>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                    Рейтинг {rating}
-                </Typography>
-            </CardContent>
+                </CardContent>
+            </CardActionArea>
         </Card>
-    )
-}
+    );
+};
