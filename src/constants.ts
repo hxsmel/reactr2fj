@@ -1,5 +1,4 @@
-import { createContext } from "react";
-import { OptionData, State, TSortBy, AuthContextType } from './types';
+import { OptionData, State, TSortBy, } from './types';
 
 export const emailRegex = /^[a-zA-Z0-9.\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z0-9_-]+$/;
 
@@ -16,7 +15,6 @@ export const INITIAL_YEAR_RANGE: [number, number] = [MIN_YEAR, MAX_YEAR];
 export const SORT_OPTIONS: OptionData[] = [
     { label: 'Популярности', value: 'Популярности' },
     { label: 'Рейтингу', value: 'Рейтингу' },
-    { label: 'Году', value: 'Году' },
 ];
 
 export const INITIAL_SORT_BY: TSortBy = 'Популярности';
@@ -27,4 +25,5 @@ export const INITIAL_STATE: State = {
     yearRange: INITIAL_YEAR_RANGE,
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const MOVIES_PER_PAGE = 6
+export const TMDB_PER_PAGE = 20
