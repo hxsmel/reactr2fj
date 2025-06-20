@@ -18,14 +18,16 @@ export function Header() {
                 height: 64,
             }}
         >
-            <Toolbar sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-            }}>
+            <Toolbar
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
                 <Typography
                     variant="body1"
-                    sx={{fontSize: 20}}
+                    sx={{ fontSize: 20, color: '#fff' }}
                 >
                     Фильмы
                 </Typography>
@@ -34,9 +36,9 @@ export function Header() {
                     onClick={handleLogin}
                     sx={{ cursor: 'pointer' }}
                 >
-                    <AccountCircleIcon sx={{color: 'white'}} />
+                    <AccountCircleIcon sx={{ color: '#fff' }} />
                 </Button>
             </Toolbar>
         </AppBar>
     );
-}
+};

@@ -29,6 +29,7 @@ export const MoviesList = ({ currentPage, onTotalPagesChange }: MoviesListProps)
                 {visibleMovies.map((m) => (
                     <MovieCard
                         key={m.id}
+                        id={m.id}                        // ← добавили сюда
                         title={m.title}
                         rating={m.vote_average}
                         image={
