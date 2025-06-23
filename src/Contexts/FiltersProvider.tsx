@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
-import { reducer } from '../Filters/Reducer';
+import { reducer } from '../Filters/Reducer.ts';
 import { INITIAL_STATE } from '../constants';
-import { FiltersStateContext, FiltersDispatchContext } from './FiltersContext';
+import { FiltersStateContext, FiltersDispatchContext } from './FiltersContext.ts';
 import { FiltersProviderProps } from '../types';
 
 export function FiltersProvider({ children }: FiltersProviderProps) {
