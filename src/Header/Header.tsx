@@ -3,42 +3,49 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useLoginDialog } from '../hooks/useLoginDialog';
 
 export function Header() {
+    const { openDialog, dialog } = useLoginDialog();
+
     const handleLogin = () => {
-        // тут будет логика AccountCircleIcon, которой пока нет
+        openDialog();
     };
 
     return (
-        <AppBar
-            position="static"
-            elevation={0}
-            sx={{
-                backgroundColor: '#2196F3',
-                height: 64,
-            }}
-        >
-            <Toolbar
+        <>
+            <AppBar
+                position="static"
+                elevation={0}
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    backgroundColor: '#2196F3',
+                    height: 64,
                 }}
             >
-                <Typography
-                    variant="body1"
-                    sx={{ fontSize: 20, color: '#fff' }}
+                <Toolbar
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
                 >
-                    Фильмы
-                </Typography>
-                <Button
-                    variant="text"
-                    onClick={handleLogin}
-                    sx={{ cursor: 'pointer' }}
-                >
-                    <AccountCircleIcon sx={{ color: '#fff' }} />
-                </Button>
-            </Toolbar>
-        </AppBar>
+                    <Typography
+                        variant="body1"
+                        sx={{ fontSize: 20, color: '#fff' }}
+                    >
+                        Фильмы
+                    </Typography>
+                    <Button
+                        variant="text"
+                        onClick={handleLogin}
+                        sx={{ cursor: 'pointer' }}
+                    >
+                        <AccountCircleIcon sx={{ color: '#fff' }} />
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
+            {dialog}
+        </>
     );
-};
+}

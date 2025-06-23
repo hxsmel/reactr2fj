@@ -104,3 +104,46 @@ export interface InfoGridProps {
     movie: MovieInfo;
     credits: Credits;
 }
+
+export interface LoginDialogProps {
+    open: boolean;
+    onClose: () => void;
+}
+
+export type LoginStep = 'email' | 'token';
+
+export interface EmailStepProps {
+    email: string;
+    setEmail: React.Dispatch<React.SetStateAction<string>>;
+    isEmailValid: boolean;
+}
+
+export interface EmailStepActionsProps {
+    isEmailValid: boolean;
+    handleRequest: () => void;
+    handleDialogClose: () => void;
+}
+
+export interface TokenStepProps {
+    token: string;
+    setToken: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface TokenStepActionsProps {
+    token: string;
+    handleConfirmToken: () => void;
+    handleBackToEmail: () => void;
+}
+
+export type StepConfigMap = {
+    email: {
+        title: string;
+        content: (props: EmailStepProps) => ReactNode;
+        actions: (props: EmailStepActionsProps) => ReactNode;
+    };
+    token: {
+        title: string;
+        content: (props: TokenStepProps) => ReactNode;
+        actions: (props: TokenStepActionsProps) => ReactNode;
+    };
+};
