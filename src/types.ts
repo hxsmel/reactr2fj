@@ -42,6 +42,7 @@ export interface MovieCardProps {
     rating: number;
     image: string;
     favorite?: boolean;
+    disabled?: boolean;
     onToggleFavorite?: (id: number) => void;
 }
 
@@ -94,6 +95,7 @@ export interface MovieHeaderProps {
     isFav: boolean;
     onBack: () => void;
     onToggleFavorite: () => void;
+    disabled?: boolean;
 }
 
 export interface CastListProps {

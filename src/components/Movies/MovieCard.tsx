@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Card,
     CardMedia,
     CardContent,
     Typography,
     IconButton,
+    CircularProgress,
     Box,
     CardActionArea,
 } from '@mui/material';
@@ -18,42 +19,41 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                                                         rating,
                                                         image,
                                                         favorite = false,
+                                                        disabled = false,
                                                         onToggleFavorite,
-                                                    }) => {
-    const [isFavorite, setIsFavorite] = useState<boolean>(favorite)
-
-    const handleClick = () => {
-        setIsFavorite((prev) => !prev);
-        onToggleFavorite?.(id);
-    };
-
-    return (
-        <Card sx={{ width: 286, height: 324 }}>
-            <CardActionArea component={RouterLink} to={`/movies/${id}`}>
-                <CardMedia
-                    component="img"
-                    height="240"
-                    image={image}
-                    alt={"Тут должен был быть постер фильма"}
-                />
-                <CardContent>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="subtitle1">{title}</Typography>
-                        <IconButton
-                            size="medium"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleClick();
-                            }}
-                        >
-                            {isFavorite ? <Star sx={{ color: 'gold' }} /> : <StarBorder />}
-                        </IconButton>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                        Рейтинг {rating}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
-    );
-};
+                                                    }) => (
+    <Card sx={{ width: 286, height: 324 }}>
+        <CardActionArea component={RouterLink} to={`/movies/${id}`}>
+            <CardMedia
+                component="img"
+                height="240"
+                image={image}
+                alt="Постер фильма"
+            />
+            <CardContent>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="subtitle1">{title}</Typography>
+                    <IconButton
+                        size="medium"
+                        disabled={disabled}
+                        onClick={e => {
+                            e.preventDefault();
+                            onToggleFavorite?.(id);
+                        }}
+                    >
+                        {disabled ? (
+                            <CircularProgress size={24} />
+                        ) : favorite ? (
+                            <Star sx={{ color: 'gold' }} />
+                        ) : (
+                            <StarBorder />
+                        )}
+                    </IconButton>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                    Рейтинг {rating}
+                </Typography>
+            </CardContent>
+        </CardActionArea>
+    </Card>
+);
