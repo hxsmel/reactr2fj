@@ -26,7 +26,7 @@ import { useFetch } from '../hooks/useFetch'
 import {
     FiltersStateContext,
     FiltersDispatchContext,
-} from '../Contexts/FiltersContext'
+} from '../Contexts/FiltersContext.ts'
 import { Pagination } from '../Pagination/Pagination'
 
 interface FiltersProps {

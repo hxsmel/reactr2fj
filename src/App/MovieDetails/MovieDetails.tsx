@@ -1,27 +1,46 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, CardMedia, Typography, CircularProgress } from '@mui/material';
+import { Box, CardMedia, Typography } from '@mui/material';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
+import { useFavoriteIds } from '../../hooks/useFavoriteIds';
+import { useToggleFavorite } from '../../hooks/useToggleFavorite';
 import { MovieHeader } from './MovieHeader';
 import { CastList } from './CastList';
 import { InfoGrid } from './InfoGrid';
+import { ErrorMessage } from '../../components/ErrorMessage';
+import { Loader } from '../../components/Loader';
 
 export function MovieDetails() {
     const { id } = useParams<{ id: string }>();
+    const movieId = Number(id);
     const navigate = useNavigate();
-    const { movie, credits, loading, error, isFav, toggleFavorite } = useMovieDetails(id);
+    const { movie, credits, loading, error } = useMovieDetails(id);
+    const {
+        favoriteIds,
+        error: favError,
+        refresh: reloadFavorites,
+    } = useFavoriteIds();
+    const {
+        toggle,
+        processingId,
+        error: toggleError,
+    } = useToggleFavorite(reloadFavorites);
 
-    if (loading) {
+    if (loading) return <Loader />;
+
+    if (error || !movie || !credits) {
         return (
-            <Box sx={{ p: 2, textAlign: 'center', color: '#fff' }}>
-                <CircularProgress color="inherit" />
-                <Typography mt={1}>Загрузка…</Typography>
-            </Box>
+            <Typography p={2} color="error">
+                {error || 'Что-то пошло не так'}
+            </Typography>
         );
     }
 
-    if (error || !movie || !credits) {
-        return <Typography p={2} color="#fff">{error}</Typography>;
+    if (favError || toggleError) {
+        return <ErrorMessage message={favError || toggleError!} />;
     }
+
+    const isFav = favoriteIds.includes(movieId);
+    const disabled = processingId === movieId;
 
     return (
         <>
@@ -29,14 +48,19 @@ export function MovieDetails() {
                 movie={movie}
                 isFav={isFav}
                 onBack={() => navigate(-1)}
-                onToggleFavorite={toggleFavorite}
+                onToggleFavorite={() => toggle({ movieId, isFavorite: isFav })}
+                disabled={disabled}
             />
 
             <Box sx={{ display: 'flex', p: 2, gap: 4, color: '#fff' }}>
                 <CardMedia
                     component="img"
                     sx={{ width: 300, borderRadius: 1 }}
-                    image={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''}
+                    image={
+                        movie.poster_path
+                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                            : ''
+                    }
                     alt={movie.title}
                 />
 

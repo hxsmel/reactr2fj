@@ -29,3 +29,7 @@ export const MOVIES_PER_PAGE = 6
 export const TMDB_PER_PAGE = 20
 
 export const BASE_URL = 'https://api.themoviedb.org/3/movie';
+
+export const TMDB_ACCOUNT_ID = 22024061;
+
+export const ACCOUNT_BASE = `https://api.themoviedb.org/3/account/${TMDB_ACCOUNT_ID}`;
