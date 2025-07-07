@@ -33,3 +33,6 @@ export const BASE_URL = 'https://api.themoviedb.org/3/movie';
 export const TMDB_ACCOUNT_ID = 22024061;
 
 export const ACCOUNT_BASE = `https://api.themoviedb.org/3/account/${TMDB_ACCOUNT_ID}`;
+
+export const MAX_TOTAL_RESULTS = 10000;
+export const MAX_TMDB_PAGE = 500;

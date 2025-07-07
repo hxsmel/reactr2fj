@@ -8,6 +8,7 @@ import { INITIAL_PAGE, TOTAL_PAGES } from '../constants'
 export function MainPage() {
     const [page, setPage] = useState<number>(INITIAL_PAGE)
     const [pagesCount, setPagesCount] = useState<number>(TOTAL_PAGES)
+    const [titleFilter, setTitleFilter] = useState<string>('')
 
     return (
         <Box
@@ -41,6 +42,8 @@ export function MainPage() {
                         currentPage={page}
                         totalPages={pagesCount}
                         onPageChange={setPage}
+                        movieTitleFilter={titleFilter}
+                        onMovieTitleFilterChange={setTitleFilter}
                     />
                 </Box>
 
@@ -56,6 +59,7 @@ export function MainPage() {
                     <MoviesList
                         currentPage={page}
                         onTotalPagesChange={setPagesCount}
+                        movieTitleFilter={titleFilter}
                     />
                 </Box>
             </Box>
