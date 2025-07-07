@@ -55,6 +55,7 @@ export interface PaginationProps {
 export interface MoviesListProps {
     currentPage: number;
     onTotalPagesChange: (total: number) => void;
+    movieTitleFilter: string;
 }
 
 export interface TMDBResponse {
@@ -149,3 +150,11 @@ export type StepConfigMap = {
         actions: (props: TokenStepActionsProps) => ReactNode;
     };
 };
+
+export interface FiltersProps {
+    currentPage: number
+    totalPages: number
+    onPageChange: (page: number) => void
+    movieTitleFilter?: string
+    onMovieTitleFilterChange: (value: string) => void
+}
