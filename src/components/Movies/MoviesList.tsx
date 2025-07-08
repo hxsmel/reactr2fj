@@ -7,8 +7,16 @@ import { useMoviesList } from '../../hooks/useMoviesList';
 import { useFavoriteIds } from '../../hooks/useFavoriteIds';
 import { useToggleFavorite } from '../../hooks/useToggleFavorite';
 
-export const MoviesList = ({ currentPage, onTotalPagesChange }: MoviesListProps) => {
-    const { visibleMovies, loading, error } = useMoviesList(currentPage, onTotalPagesChange);
+export const MoviesList = ({
+                               currentPage,
+                               onTotalPagesChange,
+                               movieTitleFilter = '',
+                           }: MoviesListProps) => {
+    const { visibleMovies, loading, error } = useMoviesList(
+        currentPage,
+        onTotalPagesChange,
+        movieTitleFilter
+    );
 
     const {
         favoriteIds,

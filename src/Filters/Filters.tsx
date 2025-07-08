@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
@@ -10,11 +10,11 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Checkbox from '@mui/material/Checkbox'
 import Slider from '@mui/material/Slider'
-import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import Chip from '@mui/material/Chip'
+import Autocomplete from '@mui/material/Autocomplete'
 
-import { TSortBy, Genre } from '../types'
+import { TSortBy, Genre, FiltersProps } from '../types'
 import {
     TMDB_GENRE_URL,
     SORT_OPTIONS,
@@ -23,19 +23,22 @@ import {
 } from '../constants'
 import { useAuth } from '../Contexts/UseAuth'
 import { useFetch } from '../hooks/useFetch'
+import { Loader } from '../components/Loader'
+import { ErrorMessage } from '../components/ErrorMessage'
 import {
     FiltersStateContext,
     FiltersDispatchContext,
-} from '../Contexts/FiltersContext.ts'
+} from '../Contexts/FiltersContext'
 import { Pagination } from '../Pagination/Pagination'
 
-interface FiltersProps {
-    currentPage: number
-    totalPages: number
-    onPageChange: (page: number) => void
-}
-
-export function Filters({ currentPage, totalPages, onPageChange }: FiltersProps) {
+export function Filters({
+                            currentPage,
+                            totalPages,
+                            onPageChange,
+                            movieTitleFilter = '',
+                            onMovieTitleFilterChange = () => {},
+                        }: FiltersProps) {
+    const [localTitle, setLocalTitle] = useState(movieTitleFilter)
     const state = useContext(FiltersStateContext)
     const dispatch = useContext(FiltersDispatchContext)
 
@@ -76,6 +79,14 @@ export function Filters({ currentPage, totalPages, onPageChange }: FiltersProps)
 
     const handleReset = () => {
         dispatch({ type: 'reset' })
+        setLocalTitle('')
+        onMovieTitleFilterChange('')
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const v = e.target.value
+        setLocalTitle(v)
+        onMovieTitleFilterChange(v)
     }
 
     const handleYearChange = (_: Event, value: number | number[]) => {
@@ -112,6 +123,15 @@ export function Filters({ currentPage, totalPages, onPageChange }: FiltersProps)
                 </IconButton>
             </Box>
 
+            <TextField
+                fullWidth
+                variant="standard"
+                label="Название фильма"
+                value={localTitle}
+                onChange={handleInputChange}
+                sx={{ mb: 3 }}
+            />
+
             <FormControl fullWidth variant="standard" sx={{ mb: 2 }}>
                 <InputLabel>Сортировать по</InputLabel>
                 <Select
@@ -147,38 +167,41 @@ export function Filters({ currentPage, totalPages, onPageChange }: FiltersProps)
                 />
             </Box>
 
-            <Autocomplete
-                multiple
-                disableCloseOnSelect
-                options={allGenres}
-                getOptionLabel={(g) => g.name}
-                loading={loadingGenres}
-                value={allGenres.filter((g) => selectedGenres[g.id])}
-                onChange={handleGenresChange}
-                renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                        <Checkbox sx={{ mr: 1 }} checked={selected} size="small" />
-                        {option.name}
-                    </li>
-                )}
-                renderValue={(value, getTagProps) =>
-                    value.map((option, idx) => {
-                        const tagProps = getTagProps({ index: idx })
-                        return <Chip label={option.name} size="small" {...tagProps} />
-                    })
-                }
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        variant="standard"
-                        label="Жанры"
-                        placeholder="Выберите жанры"
-                        error={Boolean(errorGenres)}
-                        helperText={errorGenres}
-                    />
-                )}
-                sx={{ mb: 3 }}
-            />
+            {loadingGenres ? (
+                <Loader />
+            ) : errorGenres ? (
+                <ErrorMessage message={errorGenres} />
+            ) : (
+                <Autocomplete
+                    multiple
+                    disableCloseOnSelect
+                    options={allGenres}
+                    getOptionLabel={(g) => g.name}
+                    value={allGenres.filter((g) => selectedGenres[g.id])}
+                    onChange={handleGenresChange}
+                    renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                            <Checkbox sx={{ mr: 1 }} checked={selected} size="small" />
+                            {option.name}
+                        </li>
+                    )}
+                    renderValue={(value, getTagProps) =>
+                        value.map((option, idx) => {
+                            const tagProps = getTagProps({ index: idx })
+                            return <Chip label={option.name} size="small" {...tagProps} />
+                        })
+                    }
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            label="Жанры"
+                            placeholder="Выберите жанры"
+                        />
+                    )}
+                    sx={{ mb: 3 }}
+                />
+            )}
 
             <Pagination
                 currentPage={currentPage}
