@@ -38,6 +38,7 @@ export function useToggleFavorite(onSuccess?: () => void) {
                 onSuccess?.();
             } catch (e: any) {
                 setError(e.message);
+                throw e;
             } finally {
                 setProcessingId(null);
             }
