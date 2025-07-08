@@ -158,3 +158,34 @@ export interface FiltersProps {
     movieTitleFilter?: string
     onMovieTitleFilterChange?: (value: string) => void
 }
+
+export interface GenreFilterProps {
+    allGenres: Genre[]
+    selectedMap: Record<number, boolean>
+    onChange: (selected: Genre[]) => void
+}
+
+export interface FiltersHeaderProps {
+    onReset: () => void
+}
+
+export interface FiltersTitleProps {
+    value: string
+    onChange: (value: string) => void
+}
+
+export interface SortByFilterProps {
+    sortBy: TSortBy
+    onChange: (value: TSortBy) => void
+}
+
+export interface YearFilterProps {
+    yearRange: [number, number]
+    onChange: (value: [number, number]) => void
+}
+
+export interface GenreFilterProps {
+    allGenres: Genre[]
+    selectedMap: Record<number, boolean>
+    onChange: (value: Genre[]) => void
+}

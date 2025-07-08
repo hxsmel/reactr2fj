@@ -1,25 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
-import Box from '@mui/material/Box'
+import { useContext, useEffect, useState, useCallback, } from 'react'
 import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
-import Checkbox from '@mui/material/Checkbox'
-import Slider from '@mui/material/Slider'
-import TextField from '@mui/material/TextField'
-import Chip from '@mui/material/Chip'
-import Autocomplete from '@mui/material/Autocomplete'
+
 
 import { TSortBy, Genre, FiltersProps } from '../types'
 import {
     TMDB_GENRE_URL,
-    SORT_OPTIONS,
-    MIN_YEAR,
-    MAX_YEAR,
 } from '../constants'
 import { useAuth } from '../Contexts/UseAuth'
 import { useFetch } from '../hooks/useFetch'
@@ -30,6 +15,11 @@ import {
     FiltersDispatchContext,
 } from '../Contexts/FiltersContext'
 import { Pagination } from '../Pagination/Pagination'
+import { FiltersHeader } from './FiltersHeader'
+import { FiltersTitle } from './FiltersTitle'
+import { SortByFilter } from './SortByFilter'
+import { YearFilter } from './YearFilter'
+import { GenreFilter } from './GenreFilter'
 
 export function Filters({
                             currentPage,
@@ -77,129 +67,59 @@ export function Filters({
         }
     }, [data, dispatch])
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         dispatch({ type: 'reset' })
         setLocalTitle('')
         onMovieTitleFilterChange('')
-    }
+    }, [dispatch, onMovieTitleFilterChange])
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = e.target.value
-        setLocalTitle(v)
-        onMovieTitleFilterChange(v)
-    }
+    const handleTitleChange = useCallback(
+        (v: string) => {
+            setLocalTitle(v)
+            onMovieTitleFilterChange(v)
+        },
+        [onMovieTitleFilterChange]
+    )
 
-    const handleYearChange = (_: Event, value: number | number[]) => {
-        dispatch({
-            type: 'setYearRange',
-            payload: value as [number, number],
-        })
-    }
+    const handleSortChange = useCallback(
+        (v: TSortBy) => dispatch({ type: 'setSortBy', payload: v }),
+        [dispatch]
+    )
+
+    const handleYearChange = useCallback(
+        (value: [number, number]) => dispatch({ type: 'setYearRange', payload: value }),
+        [dispatch]
+    )
+
+    const handleGenresChange = useCallback(
+        (selected: Genre[]) => {
+            const map: Record<number, boolean> = {}
+            data?.genres.forEach((g) => {
+                map[g.id] = selected.some((s) => s.id === g.id)
+            })
+            dispatch({ type: 'initGenres', payload: map })
+        },
+        [data, dispatch]
+    )
 
     const allGenres = data?.genres ?? []
 
-    const handleGenresChange = (_: any, value: Genre[]) => {
-        const newMap: Record<number, boolean> = {}
-        allGenres.forEach((g) => {
-            newMap[g.id] = value.some((sel) => sel.id === g.id)
-        })
-        dispatch({ type: 'initGenres', payload: newMap })
-    }
-
     return (
-        <Paper
-            elevation={4}
-            sx={{
-                width: 300,
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography variant="h6">Фильтры</Typography>
-                <IconButton size="small" onClick={handleReset}>
-                    <CloseIcon />
-                </IconButton>
-            </Box>
-
-            <TextField
-                fullWidth
-                variant="standard"
-                label="Название фильма"
-                value={localTitle}
-                onChange={handleInputChange}
-                sx={{ mb: 3 }}
-            />
-
-            <FormControl fullWidth variant="standard" sx={{ mb: 2 }}>
-                <InputLabel>Сортировать по</InputLabel>
-                <Select
-                    variant="standard"
-                    value={sortBy}
-                    onChange={(e) =>
-                        dispatch({
-                            type: 'setSortBy',
-                            payload: e.target.value as TSortBy,
-                        })
-                    }
-                >
-                    {SORT_OPTIONS.map((opt) => (
-                        <MenuItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-
-            <Box sx={{ mb: 4 }}>
-                <Typography gutterBottom>Год релиза</Typography>
-                <Slider
-                    value={yearRange}
-                    onChange={handleYearChange}
-                    valueLabelDisplay="on"
-                    min={MIN_YEAR}
-                    max={MAX_YEAR}
-                    marks={[
-                        { value: MIN_YEAR, label: String(MIN_YEAR) },
-                        { value: MAX_YEAR, label: String(MAX_YEAR) },
-                    ]}
-                />
-            </Box>
+        <Paper elevation={4} sx={{ width: 300, p: 2, display: 'flex', flexDirection: 'column' }}>
+            <FiltersHeader onReset={handleReset} />
+            <FiltersTitle value={localTitle} onChange={handleTitleChange} />
+            <SortByFilter sortBy={sortBy} onChange={handleSortChange} />
+            <YearFilter yearRange={yearRange} onChange={handleYearChange} />
 
             {loadingGenres ? (
                 <Loader />
             ) : errorGenres ? (
                 <ErrorMessage message={errorGenres} />
             ) : (
-                <Autocomplete
-                    multiple
-                    disableCloseOnSelect
-                    options={allGenres}
-                    getOptionLabel={(g) => g.name}
-                    value={allGenres.filter((g) => selectedGenres[g.id])}
+                <GenreFilter
+                    allGenres={allGenres}
+                    selectedMap={selectedGenres}
                     onChange={handleGenresChange}
-                    renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                            <Checkbox sx={{ mr: 1 }} checked={selected} size="small" />
-                            {option.name}
-                        </li>
-                    )}
-                    renderValue={(value, getTagProps) =>
-                        value.map((option, idx) => {
-                            const tagProps = getTagProps({ index: idx })
-                            return <Chip label={option.name} size="small" {...tagProps} />
-                        })
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            variant="standard"
-                            label="Жанры"
-                            placeholder="Выберите жанры"
-                        />
-                    )}
-                    sx={{ mb: 3 }}
                 />
             )}
 

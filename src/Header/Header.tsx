@@ -1,51 +1,44 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useLoginDialog } from '../hooks/useLoginDialog';
+import { memo, useCallback } from 'react'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { useLoginDialog } from '../hooks/useLoginDialog'
+import { APPBAR_SX, TOOLBAR_SX, TITLE_SX, BUTTON_SX, ICON_SX } from './headerStyles'
 
-export function Header() {
-    const { openDialog, dialog } = useLoginDialog();
+const MoviesTitle = memo(() => (
+    <Typography variant="body1" sx={TITLE_SX}>
+        Фильмы
+    </Typography>
+))
+MoviesTitle.displayName = 'MoviesTitle'
 
-    const handleLogin = () => {
-        openDialog();
-    };
+const ProfileIcon = memo(({ onLogin }: { onLogin: () => void }) => (
+    <Button variant="text" onClick={onLogin} sx={BUTTON_SX}>
+        <AccountCircleIcon sx={ICON_SX} />
+    </Button>
+))
+ProfileIcon.displayName = 'ProfileIcon'
+
+function HeaderComponent() {
+    const { openDialog, dialog } = useLoginDialog()
+    const handleLogin = useCallback(() => {
+        openDialog()
+    }, [openDialog])
 
     return (
         <>
-            <AppBar
-                position="static"
-                elevation={0}
-                sx={{
-                    backgroundColor: '#2196F3',
-                    height: 64,
-                }}
-            >
-                <Toolbar
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography
-                        variant="body1"
-                        sx={{ fontSize: 20, color: '#fff' }}
-                    >
-                        Фильмы
-                    </Typography>
-                    <Button
-                        variant="text"
-                        onClick={handleLogin}
-                        sx={{ cursor: 'pointer' }}
-                    >
-                        <AccountCircleIcon sx={{ color: '#fff' }} />
-                    </Button>
+            <AppBar position="static" elevation={0} sx={APPBAR_SX}>
+                <Toolbar sx={TOOLBAR_SX}>
+                    <MoviesTitle />
+                    <ProfileIcon onLogin={handleLogin} />
                 </Toolbar>
             </AppBar>
-
             {dialog}
         </>
-    );
+    )
 }
+
+export const Header = memo(HeaderComponent)
+Header.displayName = 'Header'
