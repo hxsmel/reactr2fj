@@ -43,7 +43,8 @@ export interface MovieCardProps {
     image: string;
     favorite?: boolean;
     disabled?: boolean;
-    onToggleFavorite?: (id: number) => void;
+    onToggleFavorite?: () => void;
+    starPosition?: 'top' | 'bottom';
 }
 
 export interface PaginationProps {
@@ -158,3 +159,12 @@ export interface FiltersProps {
     movieTitleFilter?: string
     onMovieTitleFilterChange: (value: string) => void
 }
+
+export interface FavoriteBtnProps {
+    favorite: boolean;
+    disabled: boolean;
+    position: 'top' | 'bottom';
+    onToggle: () => void;
+}
+
+export type ifMovFav = { movieId: number; isFavorite: boolean };

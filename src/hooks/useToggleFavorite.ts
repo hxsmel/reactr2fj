@@ -1,17 +1,28 @@
 import { useState, useCallback } from 'react';
 import { getRequestOptions } from '../utils/api';
 import { ACCOUNT_BASE } from '../constants';
-
-type Params = { movieId: number; isFavorite: boolean };
+import { useFavoriteIds } from './useFavoriteIds';
+import { ifMovFav } from '../types'
 
 export function useToggleFavorite(onSuccess?: () => void) {
+    const {
+        favoriteIds,
+        setFavoriteIds,
+        error: favError,
+        refresh: reloadFavorites,
+    } = useFavoriteIds();
+
     const [processingId, setProcessingId] = useState<number | null>(null);
-    const [error, setError] = useState<string | null>(null);
 
     const toggle = useCallback(
-        async ({ movieId, isFavorite }: Params) => {
+        async ({ movieId, isFavorite }: ifMovFav) => {
             setProcessingId(movieId);
-            setError(null);
+            const prev = Array.isArray(favoriteIds) ? [...favoriteIds] : [];
+            const next = isFavorite
+                ? prev.filter(id => id !== movieId)
+                : [...prev, movieId];
+            setFavoriteIds(next);
+
             try {
                 const options = getRequestOptions();
                 if (!options) throw new Error('Не авторизован');
@@ -21,7 +32,6 @@ export function useToggleFavorite(onSuccess?: () => void) {
                     media_id: movieId,
                     favorite: !isFavorite,
                 };
-
                 const res = await fetch(
                     `${ACCOUNT_BASE}/favorite?language=ru-RU`,
                     {
@@ -37,13 +47,21 @@ export function useToggleFavorite(onSuccess?: () => void) {
                 if (!res.ok) throw new Error(`Ошибка ${res.status}`);
                 onSuccess?.();
             } catch (e: any) {
-                setError(e.message);
+                // Откат и проброс ошибки
+                setFavoriteIds(prev);
+                throw e;
             } finally {
                 setProcessingId(null);
             }
         },
-        [onSuccess]
+        [favoriteIds, setFavoriteIds, onSuccess]
     );
 
-    return { toggle, processingId, error };
+    return {
+        favoriteIds,
+        toggle,
+        processingId,
+        error: favError,
+        refresh: reloadFavorites,
+    };
 }
