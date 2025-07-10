@@ -33,5 +33,5 @@ export function useFavoriteIds() {
         fetchFavorites();
     }, [fetchFavorites]);
 
-    return { favoriteIds, loading, error, refresh: fetchFavorites };
+    return { favoriteIds, setFavoriteIds, loading, error, refresh: fetchFavorites };
 }

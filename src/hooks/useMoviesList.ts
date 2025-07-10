@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchTotalResults, fetchMoviesByGlobalRange } from '../utils/moviesApi';
 import { MOVIES_PER_PAGE } from '../constants';
 import { useFiltersContext } from './useFiltersContext';
-import {TMDBResponse} from "../types.ts";
+import { TMDBResponse } from '../types';
 
 export function useMoviesList(
     currentPage: number,
@@ -35,16 +35,24 @@ export function useMoviesList(
                     globalEnd
                 );
 
-                if (!cancelled) setVisibleMovies(movies);
+                if (!cancelled) {
+                    setVisibleMovies(movies);
+                }
             } catch (e: any) {
-                if (!cancelled) setError(e.message || 'Ошибка при загрузке фильмов');
+                if (!cancelled) {
+                    setError(e.message || 'Ошибка при загрузке фильмов');
+                }
             } finally {
-                if (!cancelled) setLoading(false);
+                if (!cancelled) {
+                    setLoading(false);
+                }
             }
         }
 
         load();
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+        };
     }, [currentPage, onTotalPagesChange, sortBy, movieTitleFilter]);
 
     return { visibleMovies, loading, error };
