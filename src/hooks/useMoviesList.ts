@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { TMDBResponse } from '../types';
+import { useSelector } from 'react-redux';
+import { TMDBResponse, RootState } from '../types';
 import { MOVIES_PER_PAGE, TMDB_PER_PAGE, MAX_TOTAL_RESULTS, MAX_TMDB_PAGE } from '../constants';
 import { getRequestOptions } from '../utils/api';
-import { useFiltersContext } from './useFiltersContext';
+import { selectSortBy } from '../store/filtersSelectors';
 
 function buildDiscoverUrl(sortBy: string, tmdbPage: number) {
     const endpoint = sortBy === 'Популярности' ? 'movie/popular' : 'movie/top_rated';
@@ -19,7 +20,7 @@ export function useMoviesList(
     onTotalPagesChange: (pages: number) => void,
     movieTitleFilter: string = ''
 ) {
-    const { sortBy } = useFiltersContext();
+    const sortBy = useSelector((state: RootState) => selectSortBy(state));
     const [visibleMovies, setVisibleMovies] = useState<TMDBResponse['results'][0][]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -54,7 +55,6 @@ export function useMoviesList(
                     const totalUIpages = Math.ceil(totalResults / MOVIES_PER_PAGE);
                     onTotalPagesChange(totalUIpages);
                 }
-
                 else {
                     const resp = await fetch(buildDiscoverUrl(sortBy, 1), options);
                     const data: TMDBResponse = await resp.json();

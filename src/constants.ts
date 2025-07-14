@@ -1,4 +1,4 @@
-import { OptionData, State, TSortBy, } from './types';
+import {AuthState, OptionData, State, TSortBy,} from './types';
 
 export const INITIAL_PAGE = 1;
 export const TOTAL_PAGES = 5;
@@ -34,3 +34,8 @@ export const ACCOUNT_BASE = `https://api.themoviedb.org/3/account/${TMDB_ACCOUNT
 
 export const MAX_TOTAL_RESULTS = 10000;
 export const MAX_TMDB_PAGE = 500;
+
+export const initialState: AuthState = {
+    token: null,
+    user: null,
+};

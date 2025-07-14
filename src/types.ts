@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import {store} from "./store";
 
 export type TFormType = 'login' | 'register';
 
@@ -188,4 +189,17 @@ export interface GenreFilterProps {
     allGenres: Genre[]
     selectedMap: Record<number, boolean>
     onChange: (value: Genre[]) => void
+}
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export interface AuthState {
+    token: string | null;
+    user: { email: string } | null;
+}
+
+export interface CredentialsPayload {
+    token: string;
+    user: { email: string };
 }
