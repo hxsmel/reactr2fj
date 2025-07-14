@@ -1,25 +1,18 @@
-import { useContext, useEffect, useState, useCallback, } from 'react'
-import Paper from '@mui/material/Paper'
-
-
-import { TSortBy, Genre, FiltersProps } from '../types'
-import {
-    TMDB_GENRE_URL,
-} from '../constants'
-import { useAuth } from '../Contexts/UseAuth'
-import { useFetch } from '../hooks/useFetch'
-import { Loader } from '../components/Loader'
-import { ErrorMessage } from '../components/ErrorMessage'
-import {
-    FiltersStateContext,
-    FiltersDispatchContext,
-} from '../Contexts/FiltersContext'
-import { Pagination } from '../Pagination/Pagination'
-import { FiltersHeader } from './FiltersHeader'
-import { FiltersTitle } from './FiltersTitle'
-import { SortByFilter } from './SortByFilter'
-import { YearFilter } from './YearFilter'
-import { GenreFilter } from './GenreFilter'
+import { useContext, useEffect, useState, useCallback } from 'react';
+import Paper from '@mui/material/Paper';
+import { TSortBy, Genre, FiltersProps } from '../types';
+import { TMDB_GENRE_URL } from '../constants';
+import { useFetch } from '../hooks/useFetch';
+import { Loader } from '../components/Loader';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { FiltersStateContext, FiltersDispatchContext } from '../Contexts/FiltersContext';
+import { Pagination } from '../Pagination/Pagination';
+import { FiltersHeader } from './FiltersHeader';
+import { FiltersTitle } from './FiltersTitle';
+import { SortByFilter } from './SortByFilter';
+import { YearFilter } from './YearFilter';
+import { GenreFilter } from './GenreFilter';
+import { getRequestOptions } from '../utils/api';
 
 export function Filters({
                             currentPage,
@@ -37,23 +30,15 @@ export function Filters({
     }
 
     const { sortBy, yearRange, selectedGenres } = state
-    const { token } = useAuth()
+
     const {
         data,
         loading: loadingGenres,
         error: errorGenres,
     } = useFetch<{ genres: Genre[] }>(
         TMDB_GENRE_URL,
-        token
-            ? {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-            : undefined
-    )
+        getRequestOptions()
+    );
 
     useEffect(() => {
         if (data) {
