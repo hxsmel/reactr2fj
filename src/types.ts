@@ -203,3 +203,16 @@ export interface CredentialsPayload {
     token: string;
     user: { email: string };
 }
+
+export interface MoviesState {
+    list: TMDBResponse['results'];
+    totalUIpages: number;
+    loading: boolean;
+    error: string | null;
+    details: {
+        movie: MovieInfo | null;
+        credits: Credits | null;
+        loading: boolean;
+        error: string | null;
+    };
+}

@@ -1,31 +1,23 @@
-import { useState, useEffect } from 'react';
-import { fetchMovieInfo, fetchMovieCredits } from '../utils/movieApi';
-import { MovieInfo, Credits } from '../types';
+import { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovieDetails } from '../store/fetchMovieDetails';
+import { RootState, AppDispatch } from '../types';
 
 export function useMovieDetails(id?: string) {
-    const [movie, setMovie] = useState<MovieInfo | null>(null);
-    const [credits, setCredits] = useState<Credits | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
+    const { movie, credits, loading, error } = useSelector(
+        (state: RootState) => state.movies.details
+    );
     const [isFav, setIsFav] = useState(false);
 
     useEffect(() => {
-        if (!id) {
-            setError('Не указан ID фильма');
-            setLoading(false);
-            return;
-        }
-        setLoading(true); setError(null);
+        if (!id) return;
+        dispatch(fetchMovieDetails(id));
+    }, [dispatch, id]);
 
-        Promise.all([
-            fetchMovieInfo(id),
-            fetchMovieCredits(id)
-        ])
-            .then(([info, creds]) => { setMovie(info); setCredits(creds); })
-            .catch(err => setError(err.message || 'Ошибка при загрузке'))
-            .finally(() => setLoading(false));
-    }, [id]);
+    const toggleFavorite = useCallback(() => {
+        setIsFav(f => !f);
+    }, []);
 
-    const toggleFavorite = () => setIsFav(f => !f);
     return { movie, credits, loading, error, isFav, toggleFavorite };
 }
