@@ -16,7 +16,6 @@ export const filtersSlice = createSlice({
             state.yearRange = action.payload;
         },
         resetFilters(state) {
-            // Reset to initial state values
             state.sortBy = INITIAL_STATE.sortBy;
             state.yearRange = INITIAL_STATE.yearRange;
             state.selectedGenres = { ...INITIAL_STATE.selectedGenres };
@@ -45,4 +44,4 @@ export const {
 export const filtersReducer = filtersSlice.reducer;
 
 //Я видел, что через несколько уроков надо будет сделать жанры и год через redux, поэтому заранее подготовил их
-//Всё равно придется редачить, но почва уже есть; на этом этапе мог убрать год и жанры, они пока нерабочие и в уроке не просили их делать
+//Всё равно придется редачить, но почва уже есть; на этом этапе мог убрать год и жанры, они пока нерабочие и в уроке не просили
